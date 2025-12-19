@@ -6,6 +6,7 @@ services:
       args:
         UID: ${UID:-1000}
         GID: ${GID:-1000}
+    container_name: picpay-simplificado-app
     volumes:
       - .:/var/www/html
     networks:
@@ -38,6 +39,11 @@ services:
       - picpay-simplificado-db-data:/var/lib/mysql
     networks:
       - picpay-simplificado-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

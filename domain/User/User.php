@@ -94,7 +94,6 @@ class User
     public function create(): User
     {
         $this->setId(Helper::generateUuid());
-        dd($this);
 
         $this->persistence->create($this);
 

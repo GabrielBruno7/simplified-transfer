@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Domain\User\User;
 use Illuminate\Http\Request;
-use Infra\Database\UserDb\UserDb;
+use Infra\Database\UserDb;
 
 class UserController extends Controller
 {
