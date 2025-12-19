@@ -3,6 +3,7 @@
 namespace Domain\User;
 
 use Domain\Helper\Helper;
+use Domain\Wallet\Wallet;
 
 class User
 {
@@ -10,6 +11,7 @@ class User
     private string $name;
     private string $type;
     private string $email;
+    private Wallet $wallet;
     private string $password;
     private string $document;
     private UserPersistenceInterface $persistence;
@@ -75,10 +77,22 @@ class User
         return $this->document;
     }
 
+    public function setWallet(Wallet $wallet): self
+    {
+        $this->wallet = $wallet;
+
+        return $this;
+    }
+
+    public function getWallet(): Wallet
+    {
+        return $this->wallet;
+    }
+
     public function setType(string $type): self
     {
         if (!in_array($type, self::ALLOWED_USER_TYPES, true)) {
-            throw new \InvalidArgumentException('Invalid user type');
+            throw new \InvalidArgumentException('Invalid user type'); //TODO: Custom Exception E TEST
         }
 
         $this->type = $type;
@@ -107,6 +121,27 @@ class User
     {
         $this->checkIfUserAlreadyExists();
 
+        $this->createUser();
+
+        $this->createUserWallet();
+
+        return $this;
+    }
+
+    private function createUserWallet(): self
+    {
+        $this
+            ->getWallet()
+            ->setUser($this)
+            ->setId(Helper::generateUuid())
+            ->create()
+        ;
+
+        return $this;
+    }
+
+    private function createUser(): self
+    {
         $this->setId(Helper::generateUuid());
 
         $this->setPassword(bcrypt($this->getPassword()));
