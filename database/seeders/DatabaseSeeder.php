@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Gilson Mendes',
             'document' => '52833691025',
             'password' => bcrypt('password'),
-            'email' => 'gilson.mendes@example.com',
+            'email' => 'teste@teste.com',
             'id' => 'a30a1e33-52d0-4129-babd-aeb785389170',
         ]);
 
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Lucas Ramalho',
             'document' => '35445693000100',
             'password' => bcrypt('password'),
-            'email' => 'lucas.ramalho@example.com',
+            'email' => 'teste@teste.com',
             'id' => '3467076c-3bb6-495e-8b1c-0b5e99256f45',
         ]);
 

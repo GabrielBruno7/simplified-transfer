@@ -7,6 +7,7 @@ use Infra\Database\UserDb;
 use Illuminate\Http\Request;
 use Domain\Transfer\Transfer;
 use Infra\Database\TransferDb;
+use Infra\Mail\LaravelEmailSender;
 use Domain\Transfer\AuthorizerFactory;
 
 class TransferController extends Controller
@@ -37,6 +38,7 @@ class TransferController extends Controller
                 ->setPayee($payee)
                 ->setAuthorizer($authorizer)
                 ->setValue($validatedData['valor'])
+                ->setEmailSender((new LaravelEmailSender()))
                 ->execute()
             ;
 

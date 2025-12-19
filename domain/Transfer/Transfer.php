@@ -2,9 +2,10 @@
 
 namespace Domain\Transfer;
 
-use Domain\Helper\Helper;
 use Domain\User\User;
+use Domain\Helper\Helper;
 use Illuminate\Support\Facades\DB;
+use Domain\Notification\EmailSenderInterface;
 
 class Transfer
 {
@@ -12,6 +13,7 @@ class Transfer
     private User $payee;
     private User $payer;
     private float $value;
+    private EmailSenderInterface $emailSender;
     private TransferAuthorizerInterface $authorizer;
     private TransferPersistenceInterface $persistence;
 
@@ -89,6 +91,18 @@ class Transfer
         return $this->authorizer;
     }
 
+    public function setEmailSender(EmailSenderInterface $emailSender): self
+    {
+        $this->emailSender = $emailSender;
+
+        return $this;
+    }
+
+    public function getEmailSender(): EmailSenderInterface
+    {
+        return $this->emailSender;
+    }
+
     public function execute(): Transfer
     {
         $this->checkIfTransferenceIsForSameUser();
@@ -103,7 +117,14 @@ class Transfer
             $this->registerTransfer();
         });
 
+        $this->sendNotifications();
+
         return $this;
+    }
+
+    private function sendNotifications(): void
+    {
+        $this->getEmailSender()->sendTransferCompleted($this);
     }
 
     private function checkIfTransferenceIsAuthorized(): void
