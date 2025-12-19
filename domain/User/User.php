@@ -166,4 +166,15 @@ class User
     {
         return $this->persistence->findUserByEmailOrDocument($this);
     }
+
+    public function loadUserByEmail(): self
+    {
+        if (!$this->persistence->findUserByEmail($this)) {
+            throw new \RuntimeException(
+                'User with given email does not exist' //TODO: Adjust message
+            );
+        }
+
+        return $this;
+    }
 }

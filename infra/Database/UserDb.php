@@ -53,4 +53,35 @@ class UserDb implements UserPersistenceInterface
 
         return true;
     }
+
+    public function findUserByEmail(User $user): bool
+    {
+        $result = DB::table('users')
+            ->select([
+                'id',
+                'name',
+                'type',
+                'email',
+                'document',
+                'password',
+            ])
+            ->where('email', $user->getEmail())
+            ->first()
+        ;
+
+        if (!$result) {
+            return false;
+        }
+
+        $user
+            ->setId($result->id)
+            ->setName($result->name)
+            ->setType($result->type)
+            ->setEmail($result->email)
+            ->setDocument($result->document)
+            ->setPassword($result->password)
+        ;
+
+        return true;
+    }
 }
