@@ -4,6 +4,7 @@ namespace Domain\Transfer;
 
 use Domain\Helper\Helper;
 use Domain\User\User;
+use Illuminate\Support\Facades\DB;
 
 class Transfer
 {
@@ -81,13 +82,15 @@ class Transfer
         $this->checkIfTransferByMerchant();
         $this->checkPayerWalletBalance();
 
-        $this->setId(Helper::generateUuid());
+        return DB::transaction(function () {
+            $this->setId(Helper::generateUuid());
 
-        $this->updatePayerBalance();
-        $this->updatePayeeBalance();
-        $this->registerTransfer();
+            $this->updatePayerBalance();
+            $this->updatePayeeBalance();
+            $this->registerTransfer();
 
-        return $this;
+            return $this;
+        });
     }
 
     private function registerTransfer(): void
