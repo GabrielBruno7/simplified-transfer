@@ -133,6 +133,7 @@ class User
         $this
             ->getWallet()
             ->setUser($this)
+            ->setBalance(0.0)
             ->setId(Helper::generateUuid())
             ->create()
         ;

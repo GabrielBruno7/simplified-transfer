@@ -21,7 +21,7 @@ class UserController extends Controller
                 'documento' => 'required|string',
             ]);
 
-            $wallet = (new Wallet(new WalletDb()))->setBalance(0.0);
+            $wallet = (new Wallet(new WalletDb()));
 
             $user = (new User(new UserDb()))
                 ->setWallet($wallet)
