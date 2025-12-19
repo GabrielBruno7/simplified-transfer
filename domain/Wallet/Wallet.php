@@ -16,6 +16,11 @@ class Wallet
         $this->persistence = $persistence;
     }
 
+    public function getPersistence(): WalletPersistenceInterface
+    {
+        return $this->persistence;
+    }
+
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -59,6 +64,22 @@ class Wallet
     public function create(): Wallet
     {
         $this->persistence->create($this);
+
+        return $this;
+    }
+
+    public function loadByUser(): Wallet
+    {
+        if (!$this->getPersistence()->loadByUser($this)) {
+            throw new \Exception('Wallet not found for user'); //TODO: Custom Exception
+        }
+
+        return $this;
+    }
+
+    public function updateBalance(): Wallet
+    {
+        $this->getPersistence()->updateBalance($this);
 
         return $this;
     }

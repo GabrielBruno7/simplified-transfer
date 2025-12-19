@@ -29,6 +29,11 @@ class User
         $this->persistence = $persistence;
     }
 
+    public function getPersistence(): UserPersistenceInterface
+    {
+        return $this->persistence;
+    }
+
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -147,7 +152,7 @@ class User
 
         $this->setPassword(bcrypt($this->getPassword()));
 
-        $this->persistence->create($this);
+        $this->getPersistence()->create($this);
 
         return $this;
     }
@@ -165,14 +170,25 @@ class User
 
     public function loadUserByEmailOrDocument(): bool
     {
-        return $this->persistence->findUserByEmailOrDocument($this);
+        return $this->getPersistence()->findUserByEmailOrDocument($this);
     }
 
     public function loadUserByEmail(): self
     {
-        if (!$this->persistence->findUserByEmail($this)) {
+        if (!$this->getPersistence()->findUserByEmail($this)) {
             throw new \RuntimeException(
                 'User with given email does not exist' //TODO: Adjust message
+            );
+        }
+
+        return $this;
+    }
+
+    public function loadByDocument(): User
+    {
+        if (!$this->getPersistence()->findUserByDocument($this)) {
+            throw new \RuntimeException(
+                'User with given document does not exist' //TODO: Adjust message
             );
         }
 
