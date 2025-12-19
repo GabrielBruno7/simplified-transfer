@@ -8,11 +8,19 @@ class User
 {
     private string $id;
     private string $name;
+    private string $type;
     private string $email;
     private string $password;
     private string $document;
-    private ?string $type = null;
     private UserPersistenceInterface $persistence;
+
+    public const USER_TYPE_COMMON = 'comum';
+    public const USER_TYPE_MERCHANT = 'lojista';
+
+    private const ALLOWED_USER_TYPES = [
+        self::USER_TYPE_COMMON,
+        self::USER_TYPE_MERCHANT,
+    ];
 
     public function __construct(UserPersistenceInterface $persistence)
     {
@@ -67,8 +75,12 @@ class User
         return $this->document;
     }
 
-    public function setType(?string $type): self
+    public function setType(string $type): self
     {
+        if (!in_array($type, self::ALLOWED_USER_TYPES, true)) {
+            throw new \InvalidArgumentException('Invalid user type');
+        }
+
         $this->type = $type;
 
         return $this;
@@ -93,10 +105,30 @@ class User
 
     public function create(): User
     {
+        $this->checkIfUserAlreadyExists();
+
         $this->setId(Helper::generateUuid());
+
+        $this->setPassword(bcrypt($this->getPassword()));
 
         $this->persistence->create($this);
 
         return $this;
+    }
+
+    private function checkIfUserAlreadyExists(): self
+    {
+        if ($this->loadUserByEmailOrDocument()) {
+            throw new \RuntimeException(
+                'User with given email or document already exists' //TODO: Adjust message
+            );
+        }
+
+        return $this;
+    }
+
+    public function loadUserByEmailOrDocument(): bool
+    {
+        return $this->persistence->findUserByEmailOrDocument($this);
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('document', 14)->unique()->nullable();
-            $table->enum('type', ['merchant', 'common'])->default('common');
+            $table->enum('type', ['lojista', 'comum'])->default('comum');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

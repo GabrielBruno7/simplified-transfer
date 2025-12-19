@@ -12,19 +12,19 @@ class UserController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'nome' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
-                'documento' => 'required|string|unique:users,document',
-                'senha' => 'required|string|min:8',
                 'tipo' => 'nullable|string',
+                'senha' => 'required|string|min:8',
+                'nome' => 'required|string|max:255',
+                'email' => 'required|email',
+                'documento' => 'required|string',
             ]);
 
             $user = (new User(new UserDb()))
                 ->setName($validatedData['nome'])
-                ->setType($validatedData['tipo'])
                 ->setEmail($validatedData['email'])
                 ->setPassword($validatedData['senha'])
                 ->setDocument($validatedData['documento'])
+                ->setType($validatedData['tipo'] ?? User::USER_TYPE_COMMON)
                 ->create()
             ;
 
