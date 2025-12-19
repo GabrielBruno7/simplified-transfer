@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Transfer\Transfer;
 use Domain\User\User;
-use Illuminate\Http\Request;
-use Infra\Database\TransferDb;
 use Infra\Database\UserDb;
+use Illuminate\Http\Request;
+use Domain\Transfer\Transfer;
+use Infra\Database\TransferDb;
+use Domain\Transfer\AuthorizerFactory;
 
 class TransferController extends Controller
 {
@@ -18,6 +19,8 @@ class TransferController extends Controller
                 'pagador' => 'required|string|max:14',
                 'recebedor' => 'required|string|max:14',
             ]);
+
+            $authorizer = AuthorizerFactory::make();
 
             $payer = (new User(new UserDb()))
                 ->setDocument($validatedData['pagador'])
@@ -32,6 +35,7 @@ class TransferController extends Controller
             $transfer = (new Transfer(new TransferDb()))
                 ->setPayer($payer)
                 ->setPayee($payee)
+                ->setAuthorizer($authorizer)
                 ->setValue($validatedData['valor'])
                 ->execute()
             ;

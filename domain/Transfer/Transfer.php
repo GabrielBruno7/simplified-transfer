@@ -12,6 +12,7 @@ class Transfer
     private User $payee;
     private User $payer;
     private float $value;
+    private TransferAuthorizerInterface $authorizer;
     private TransferPersistenceInterface $persistence;
 
     public function __construct(TransferPersistenceInterface $persistence)
@@ -76,25 +77,46 @@ class Transfer
         return $this->payer;
     }
 
+    public function setAuthorizer(TransferAuthorizerInterface $authorizer): self
+    {
+        $this->authorizer = $authorizer;
+
+        return $this;
+    }
+
+    public function getAuthorizer(): TransferAuthorizerInterface
+    {
+        return $this->authorizer;
+    }
+
     public function execute(): Transfer
     {
         $this->checkIfTransferenceIsForSameUser();
         $this->checkIfTransferByMerchant();
         $this->checkPayerWalletBalance();
 
-        return DB::transaction(function () {
-            $this->setId(Helper::generateUuid());
+        $this->checkIfTransferenceIsAuthorized();
 
+        DB::transaction(function () {
             $this->updatePayerBalance();
             $this->updatePayeeBalance();
             $this->registerTransfer();
-
-            return $this;
         });
+
+        return $this;
+    }
+
+    private function checkIfTransferenceIsAuthorized(): void
+    {
+        if (!$this->getAuthorizer()->authorize()) {
+            throw new \RuntimeException('Transfer not authorized'); //TODO: Custom Exception
+        }
     }
 
     private function registerTransfer(): void
     {
+        $this->setId(Helper::generateUuid());
+
         $this->getPersistence()->registerTransfer($this);
     }
 
