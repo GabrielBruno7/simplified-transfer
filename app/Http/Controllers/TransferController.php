@@ -40,11 +40,11 @@ class TransferController extends Controller
                 ->setPayee($payee)
                 ->setAuthorizer($authorizer)
                 ->setValue($validatedData['valor'])
-                ->setEmailSender((new LaravelEmailSender()))
+                ->setEmailSender(new LaravelEmailSender())
                 ->execute()
             ;
 
-            return response()->json(['id' => $transfer->getId()], 201);
+            return response()->json(['id' => $transfer->getId()], 200);
         } catch (UserException $e) {
             return response()->json([
                 'code' => $e->getCode(),

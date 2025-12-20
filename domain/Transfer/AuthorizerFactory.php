@@ -2,7 +2,7 @@
 
 namespace Domain\Transfer;
 
-use Infra\Authorizer\FakeTransferAuthorizer;
+use Infra\Authorizer\TransferAuthorizer;
 use Infra\Authorizer\HttpTransferAuthorizer;
 
 class AuthorizerFactory
@@ -13,7 +13,7 @@ class AuthorizerFactory
     public static function make(): TransferAuthorizerInterface
     {
         return match(app()->environment(self::ENVIROMENT_LOCAL, self::ENVIROMENT_TESTING)) {
-            true => new FakeTransferAuthorizer(),
+            true => new TransferAuthorizer(),
             false => new HttpTransferAuthorizer(),
         };
     }

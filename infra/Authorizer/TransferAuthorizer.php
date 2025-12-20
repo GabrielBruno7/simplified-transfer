@@ -4,7 +4,7 @@ namespace Infra\Authorizer;
 
 use Domain\Transfer\TransferAuthorizerInterface;
 
-class FakeTransferAuthorizer implements TransferAuthorizerInterface
+class TransferAuthorizer implements TransferAuthorizerInterface
 {
     public function authorize(): bool
     {

@@ -6,8 +6,8 @@ use Domain\User\User;
 use Domain\ErrorCodes;
 use Domain\UserException;
 use Domain\Wallet\Wallet;
-use Illuminate\Http\Request;
 use Infra\Database\UserDb;
+use Illuminate\Http\Request;
 use Infra\Database\WalletDb;
 
 class UserController extends Controller
@@ -29,8 +29,8 @@ class UserController extends Controller
                 ->setWallet($wallet)
                 ->setName($validatedData['nome'])
                 ->setEmail($validatedData['email'])
-                ->setPassword($validatedData['senha'])
                 ->setDocument($validatedData['documento'])
+                ->setPassword(bcrypt($validatedData['senha']))
                 ->setType($validatedData['tipo'] ?? User::USER_TYPE_COMMON)
                 ->create()
             ;

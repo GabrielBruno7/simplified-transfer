@@ -155,8 +155,6 @@ class User
     {
         $this->setId(Helper::generateUuid());
 
-        $this->setPassword(bcrypt($this->getPassword()));
-
         $this->getPersistence()->create($this);
 
         return $this;
@@ -166,7 +164,7 @@ class User
     {
         if ($this->loadUserByEmailOrDocument()) {
             throw new UserException(
-                ErrorCodes::USER_NOT_FOUND,
+                ErrorCodes::USER_ERROR_ALREADY_EXISTS,
                 "The user already exists"
             );
         }

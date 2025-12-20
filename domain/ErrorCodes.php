@@ -14,6 +14,7 @@ class ErrorCodes
     public const USER_ERROR_INVALID_CREDENTIALS = 4005;
     public const USER_NOT_FOUND = 4006;
     public const USER_USER_INVALID_TYPE = 4007;
+    public const USER_ERROR_ALREADY_EXISTS = 4008;
 
     public const TRANSLATIONS_PT_BR = [
         self::USER_NOT_FOUND => 'Usuário não encontrado',
@@ -23,6 +24,7 @@ class ErrorCodes
         self::USER_ERROR_MERCHANT_CANNOT_TRANSFER => 'Lojistas não podem realizar transferências',
         self::USER_ERROR_SAME_USER_TRANSFER => 'Pagador e beneficiário não podem ser o mesmo usuário',
         self::USER_ERROR_TRANSFER_NOT_AUTHORIZED => 'Transferência não autorizada pelo serviço externo',
+        self::USER_ERROR_ALREADY_EXISTS => 'O usuário já existe',
     ];
 
     public const TRANSLATIONS = [
