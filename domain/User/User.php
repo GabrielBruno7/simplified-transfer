@@ -2,7 +2,9 @@
 
 namespace Domain\User;
 
+use Domain\ErrorCodes;
 use Domain\Helper\Helper;
+use Domain\UserException;
 use Domain\Wallet\Wallet;
 
 class User
@@ -97,7 +99,10 @@ class User
     public function setType(string $type): self
     {
         if (!in_array($type, self::ALLOWED_USER_TYPES, true)) {
-            throw new \InvalidArgumentException('Invalid user type'); //TODO: Custom Exception E TEST
+            throw new UserException(
+                ErrorCodes::USER_USER_INVALID_TYPE,
+                "The type '{$type}' is invalid"
+            );
         }
 
         $this->type = $type;
@@ -160,8 +165,9 @@ class User
     private function checkIfUserAlreadyExists(): self
     {
         if ($this->loadUserByEmailOrDocument()) {
-            throw new \RuntimeException(
-                'User with given email or document already exists' //TODO: Adjust message
+            throw new UserException(
+                ErrorCodes::USER_NOT_FOUND,
+                "The user already exists"
             );
         }
 
@@ -176,8 +182,9 @@ class User
     public function loadUserByEmail(): self
     {
         if (!$this->getPersistence()->findUserByEmail($this)) {
-            throw new \RuntimeException(
-                'User with given email does not exist' //TODO: Adjust message
+            throw new UserException(
+                ErrorCodes::USER_NOT_FOUND,
+                "The user with email '{$this->getEmail()}' was not found"
             );
         }
 
@@ -187,8 +194,9 @@ class User
     public function loadByDocument(): User
     {
         if (!$this->getPersistence()->findUserByDocument($this)) {
-            throw new \RuntimeException(
-                'User with given document does not exist' //TODO: Adjust message
+            throw new UserException(
+                ErrorCodes::USER_NOT_FOUND,
+                "The user with document '{$this->getDocument()}' was not found"
             );
         }
 

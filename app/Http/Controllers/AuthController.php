@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Domain\Auth\Auth;
 use Domain\User\User;
+use Domain\ErrorCodes;
+use Domain\UserException;
 use Infra\Database\AuthDb;
-use Illuminate\Http\Request;
 use Infra\Database\UserDb;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -30,10 +32,15 @@ class AuthController extends Controller
             ;
 
             return response()->json(['token' => $auth->getToken()], 200);
-        } catch (\Exception $e) {
+        } catch (UserException $e) {
             return response()->json([
-                'error' => 'Erro interno do servidor', //TODO CUSTOM ERROR
-                'message' => $e->getMessage()
+                'code' => $e->getCode(),
+                'message' => ErrorCodes::translate($e),
+            ], 400);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erro interno no servidor',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

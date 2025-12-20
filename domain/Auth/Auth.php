@@ -3,6 +3,8 @@
 namespace Domain\Auth;
 
 use Domain\User\User;
+use Domain\ErrorCodes;
+use Domain\UserException;
 
 class Auth
 {
@@ -69,8 +71,9 @@ class Auth
         );
 
         if (!$isValidPassword) {
-            throw new \RuntimeException(
-                'Invalid credentials'
+            throw new UserException(
+                ErrorCodes::USER_ERROR_INVALID_CREDENTIALS,
+                "The provided password '{$this->getPassword()}' is incorrect"
             );
         }
     }

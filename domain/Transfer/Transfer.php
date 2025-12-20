@@ -3,9 +3,12 @@
 namespace Domain\Transfer;
 
 use Domain\User\User;
+use Domain\ErrorCodes;
 use Domain\Helper\Helper;
+use Domain\UserException;
 use Illuminate\Support\Facades\DB;
 use Domain\Notification\EmailSenderInterface;
+
 
 class Transfer
 {
@@ -130,7 +133,10 @@ class Transfer
     private function checkIfTransferenceIsAuthorized(): void
     {
         if (!$this->getAuthorizer()->authorize()) {
-            throw new \RuntimeException('Transfer not authorized'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_TRANSFER_NOT_AUTHORIZED,
+                "The transfer not authorized by external service"
+            );
         }
     }
 
@@ -166,21 +172,30 @@ class Transfer
     private function checkPayerWalletBalance(): void
     {
         if ($this->getPayer()->getWallet()->getBalance() < $this->getValue()) {
-            throw new \InvalidArgumentException('Insufficient balance for the transfer'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_INSUFFICIENT_FUNDS,
+                "The balance '{$this->getPayer()->getWallet()->getBalance()}' payer has insufficient funds to make the transfer"
+            );
         }
     }
 
     private function checkIfTransferByMerchant(): void
     {
         if ($this->getPayer()->getType() === User::USER_TYPE_MERCHANT) {
-            throw new \InvalidArgumentException('Merchants are not allowed to make transfers'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_MERCHANT_CANNOT_TRANSFER,
+                'Merchant users cannot make transfers'
+            );
         }
     }
 
     private function checkIfTransferenceIsForSameUser(): void
     {
         if ($this->getPayee()->getId() === $this->getPayer()->getId()) {
-            throw new \InvalidArgumentException('Payer and payee cannot be the same user'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_SAME_USER_TRANSFER,
+                'Payer and payee cannot be the same user',
+            );
         }
     }
 }
