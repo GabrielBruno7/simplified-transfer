@@ -41,10 +41,49 @@ class TransferController extends Controller
                 ->setAuthorizer($authorizer)
                 ->setValue($validatedData['valor'])
                 ->setEmailSender(new LaravelEmailSender())
+                ->setCreatedAt((new \DateTime())->format('Y-m-d H:i:s'))
                 ->execute()
             ;
 
             return response()->json(['id' => $transfer->getId()], 200);
+        } catch (UserException $e) {
+            return response()->json([
+                'code' => $e->getCode(),
+                'message' => ErrorCodes::translate($e),
+            ], 400);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erro interno no servidor',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function actionStatements(string $document)
+    {
+        try {
+            $user = (new User(new UserDb()))
+                ->setDocument($document)
+                ->loadByDocument()
+            ;
+
+            $statements = $user
+                ->getWallet()
+                ->loadStatements()
+                ->getStatements()
+            ;
+
+            $result = [];
+
+            foreach ($statements as $statement) {
+                $result[] = [
+                    'valor' => $statement->amount,
+                    'para' => $statement->to_name,
+                    'data' => $statement->created_at
+                ];
+            }
+
+            return response()->json(['Extrato' => $result], 200);
         } catch (UserException $e) {
             return response()->json([
                 'code' => $e->getCode(),

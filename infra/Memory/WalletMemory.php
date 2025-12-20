@@ -21,4 +21,9 @@ class WalletMemory implements WalletPersistenceInterface
     {
         return $wallet;
     }
+
+    public function loadStatements(Wallet $wallet): array
+    {
+        return [];
+    }
 }

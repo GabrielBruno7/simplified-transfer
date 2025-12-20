@@ -54,4 +54,28 @@ class WalletDb implements WalletPersistenceInterface
 
         return $wallet;
     }
+
+    public function loadStatements(Wallet $wallet): array
+    {
+        $walletId = $wallet->getId();
+
+        return DB::table('transfers as t')
+            ->select([
+                't.id',
+                't.amount',
+                't.created_at',
+                'ut.name as to_name',
+                'uf.name as from_name',
+            ])
+            ->join('wallets as wf', 'wf.id', '=', 't.from_wallet_id')
+            ->join('wallets as wt', 'wt.id', '=', 't.to_wallet_id')
+            ->join('users as uf', 'uf.id', '=', 'wf.user_id')
+            ->join('users as ut', 'ut.id', '=', 'wt.user_id')
+            ->where('t.from_wallet_id', $walletId)
+            ->orWhere('t.to_wallet_id', $walletId)
+            ->orderByDesc('t.created_at')
+            ->get()
+            ->toArray()
+        ;
+    }
 }

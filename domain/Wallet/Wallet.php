@@ -11,6 +11,7 @@ class Wallet
     private string $id;
     private User $user;
     private float $balance;
+    private array $statements;
     private WalletPersistenceInterface $persistence;
 
     public function __construct(WalletPersistenceInterface $persistence)
@@ -33,6 +34,18 @@ class Wallet
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setStatements(array $statements): self
+    {
+        $this->statements = $statements;
+
+        return $this;
+    }
+
+    public function getStatements(): array
+    {
+        return $this->statements;
     }
 
     public function setBalance(float $balance): self
@@ -88,6 +101,15 @@ class Wallet
     public function updateBalance(): Wallet
     {
         $this->getPersistence()->updateBalance($this);
+
+        return $this;
+    }
+
+    public function loadStatements(): Wallet
+    {
+        $this->setStatements(
+            $this->getPersistence()->loadStatements($this)
+        );
 
         return $this;
     }

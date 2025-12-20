@@ -44,7 +44,7 @@ class TransferTest extends TestCase
             ->setWallet($wallet)
             ->setName('Jorge Silva')
             ->setEmail('same@test.com')
-            ->setDocument('12345678901')
+            ->setDocument('13609120029')
             ->setType(User::USER_TYPE_COMMON)
             ->setId('b2541b69-a77d-4b44-9381-8284da175dbf')
         ;

@@ -17,7 +17,7 @@ class UserTest extends TestCase
 
         $user = (new User(new UserMemory()))
             ->setWallet($wallet)
-            ->setDocument('12345678903')
+            ->setDocument('79689629000140')
             ->setPassword('securepassword')
             ->setType(User::USER_TYPE_COMMON)
             ->setEmail('ana.pereira@example.com')
@@ -33,7 +33,7 @@ class UserTest extends TestCase
 
         $user = (new User(new UserMemory()))
             ->setWallet($wallet)
-            ->setDocument('12345678902')
+            ->setDocument('00583137024')
             ->setPassword('securepassword')
             ->setType(User::USER_TYPE_MERCHANT)
             ->setEmail('ana.pereira@example.com')
@@ -59,7 +59,7 @@ class UserTest extends TestCase
 
         $user = (new User(new UserMemory()))
             ->setWallet($wallet)
-            ->setDocument('12345678901')
+            ->setDocument('13609120029')
             ->setPassword('securepassword')
             ->setType(User::USER_TYPE_MERCHANT)
             ->setEmail('ana.pereira@example.com')
@@ -69,5 +69,15 @@ class UserTest extends TestCase
         $this->expectExceptionCode(ErrorCodes::USER_ERROR_ALREADY_EXISTS);
 
         $user->create();
+    }
+
+    public function testCreateUserWithInvalidDocumentThrowsException(): void
+    {
+        $invalidDocument = '12345678900';
+
+        $this->expectExceptionCode(ErrorCodes::USER_ERROR_INVALID_DOCUMENT);
+        $this->expectExceptionMessage("The Document '{$invalidDocument}' is invalid");
+
+        (new User(new UserMemory()))->setDocument($invalidDocument);
     }
 }

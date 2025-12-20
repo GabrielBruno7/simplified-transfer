@@ -16,6 +16,7 @@ class Transfer
     private User $payee;
     private User $payer;
     private float $value;
+    private string $createdAt;
     private EmailSenderInterface $emailSender;
     private TransferAuthorizerInterface $authorizer;
     private TransferPersistenceInterface $persistence;
@@ -40,6 +41,18 @@ class Transfer
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setCreatedAt(string $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
     }
 
     public function setValue(float $value): self

@@ -24,7 +24,7 @@ class UserMemory implements UserPersistenceInterface
 
     public function findUserByEmailOrDocument(User $user): bool
     {
-        if ($user->getDocument() === '12345678901') {
+        if ($user->getDocument() === '13609120029') {
             return true;
         }
 

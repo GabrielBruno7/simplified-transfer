@@ -74,6 +74,8 @@ class User
 
     public function setDocument(string $document): self
     {
+        Helper::checkDocument($document);
+
         $this->document = $document;
 
         return $this;

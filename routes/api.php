@@ -10,4 +10,5 @@ Route::POST('/user', [UserController::class, 'actionCreateUser']);
 
 Route::middleware(['jwt'])->group(function () {
     Route::POST('/transfer', [TransferController::class, 'actionTransfer']);
+    Route::GET('/{document}/statement', [TransferController::class, 'actionStatements']);
 });
