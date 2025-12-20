@@ -16,10 +16,23 @@ class Transfer
     private User $payee;
     private User $payer;
     private float $value;
+    private string $status;
     private string $createdAt;
     private EmailSenderInterface $emailSender;
     private TransferAuthorizerInterface $authorizer;
     private TransferPersistenceInterface $persistence;
+
+    private const TRANSFER_STATUS_FAILED = 'failed';
+    private const TRANSFER_STATUS_PENDING = 'pending';
+    private const TRANSFER_STATUS_CANCELED = 'canceled';
+    private const TRANSFER_STATUS_COMPLETED = 'completed';
+
+    public const ALLOWED_TRANSFER_STATUSES = [
+        self::TRANSFER_STATUS_FAILED,
+        self::TRANSFER_STATUS_PENDING,
+        self::TRANSFER_STATUS_CANCELED,
+        self::TRANSFER_STATUS_COMPLETED,
+    ];
 
     public function __construct(TransferPersistenceInterface $persistence)
     {
@@ -122,6 +135,25 @@ class Transfer
         return $this->emailSender;
     }
 
+    public function setStatus(string $status): self
+    {
+        if (!in_array($status, self::ALLOWED_TRANSFER_STATUSES)) {
+            throw new UserException(
+                ErrorCodes::USER_ERROR_TRANSFER_STATUS_INVALID,
+                "The transfer status '{$status}' is invalid"
+            );
+        }
+
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function execute(): Transfer
     {
         $this->checkIfTransferenceIsForSameUser();
@@ -159,6 +191,8 @@ class Transfer
     private function registerTransfer(): void
     {
         $this->setId(Helper::generateUuid());
+
+        $this->setStatus(self::TRANSFER_STATUS_COMPLETED);
 
         $this->getPersistence()->registerTransfer($this);
     }

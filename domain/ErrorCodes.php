@@ -19,6 +19,7 @@ class ErrorCodes
     public const USER_ERROR_WALLET_NOT_FOUND = 4010;
     public const USER_ERROR_WALLET_BALANCE_CANNOT_BE_NEGATIVE = 4011;
     public const USER_ERROR_INVALID_DOCUMENT = 4012;
+    public const USER_ERROR_TRANSFER_STATUS_INVALID = 4013;
 
     public const TRANSLATIONS_PT_BR = [
         self::USER_NOT_FOUND => 'Usuário não encontrado',
@@ -33,6 +34,7 @@ class ErrorCodes
         self::USER_ERROR_WALLET_NOT_FOUND => 'Carteira não encontrada para o usuário',
         self::USER_ERROR_WALLET_BALANCE_CANNOT_BE_NEGATIVE => 'O saldo da carteira não pode ser negativo',
         self::USER_ERROR_INVALID_DOCUMENT => 'Documento inválido',
+        self::USER_ERROR_TRANSFER_STATUS_INVALID => 'Status da transferência inválido',
     ];
 
     public const TRANSLATIONS = [

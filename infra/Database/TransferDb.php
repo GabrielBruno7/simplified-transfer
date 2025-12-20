@@ -13,6 +13,7 @@ class TransferDb implements TransferPersistenceInterface
         DB::table('transfers')->insert([
             'id' => $transfer->getId(),
             'amount' => $transfer->getValue(),
+            'status' => $transfer->getStatus(),
             'created_at' => $transfer->getCreatedAt(),
             'to_wallet_id' => $transfer->getPayee()->getWallet()->getId(),
             'from_wallet_id' => $transfer->getPayer()->getWallet()->getId(),

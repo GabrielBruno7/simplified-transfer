@@ -63,6 +63,7 @@ class WalletDb implements WalletPersistenceInterface
             ->select([
                 't.id',
                 't.amount',
+                't.status',
                 't.created_at',
                 'ut.name as to_name',
                 'uf.name as from_name',

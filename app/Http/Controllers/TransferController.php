@@ -17,9 +17,9 @@ class TransferController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'valor' => 'required|numeric|min:0.01',
-                'pagador' => 'required|string|max:14',
-                'recebedor' => 'required|string|max:14',
+                'valor' => 'required|numeric',
+                'pagador' => 'required|string',
+                'recebedor' => 'required|string',
             ]);
 
             $authorizer = AuthorizerFactory::make();

@@ -169,4 +169,14 @@ class TransferTest extends TestCase
             ->execute()
         ;
     }
+
+    public function testTransferInvalidStatusThrowsException(): void
+    {   
+        $invalidStatus = 'invalid_status';
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionCode(ErrorCodes::USER_ERROR_TRANSFER_STATUS_INVALID);
+
+        (new Transfer(new TransferMemory()))->setStatus($invalidStatus);
+    }
 }
