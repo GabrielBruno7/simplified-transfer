@@ -7,6 +7,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Infra\Log\LogService;
 
 class JwtMiddleware
 {
@@ -44,19 +45,14 @@ class JwtMiddleware
             $request->attributes->set('user', $user);
 
             return $next($request);
-        } catch (\Firebase\JWT\ExpiredException $e) {
-            return response()->json([
-                'error' => 'Token expirado'
-            ], 401);
-        } catch (\Firebase\JWT\SignatureInvalidException $e) {
-            return response()->json([
-                'error' => 'Assinatura do token inválida'
-            ], 401);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Token inválido',
-                'message' => $e->getMessage()
-            ], 401);
+        } catch (\Throwable $e) {
+            $logService = new LogService();
+            $response = $logService->handle($e);
+
+            return response()->json(
+                $response['body'],
+                $response['status']
+            );
         }
     }
 }

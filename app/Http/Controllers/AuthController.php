@@ -9,6 +9,7 @@ use Domain\UserException;
 use Infra\Database\AuthDb;
 use Infra\Database\UserDb;
 use Illuminate\Http\Request;
+use Infra\Log\LogService;
 
 class AuthController extends Controller
 {
@@ -32,16 +33,14 @@ class AuthController extends Controller
             ;
 
             return response()->json(['token' => $auth->getToken()], 200);
-        } catch (UserException $e) {
-            return response()->json([
-                'code' => $e->getCode(),
-                'message' => ErrorCodes::translate($e),
-            ], 400);
         } catch (\Throwable $e) {
-            return response()->json([
-                'message' => 'Erro interno no servidor',
-                'error' => $e->getMessage(),
-            ], 500);
+            $logService = new LogService();
+            $response = $logService->handle($e);
+
+            return response()->json(
+                $response['body'],
+                $response['status']
+            );
         }
     }
 }
