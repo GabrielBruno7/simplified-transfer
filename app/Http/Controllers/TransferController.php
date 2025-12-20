@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Domain\User\User;
-use Domain\ErrorCodes;
 use Infra\Log\LogService;
-use Domain\UserException;
 use Infra\Database\UserDb;
 use Illuminate\Http\Request;
 use Domain\Transfer\Transfer;
@@ -83,16 +81,14 @@ class TransferController extends Controller
             }
 
             return response()->json(['Extrato' => $result], 200);
-        } catch (UserException $e) {
-            return response()->json([
-                'code' => $e->getCode(),
-                'message' => ErrorCodes::translate($e),
-            ], 400);
         } catch (\Throwable $e) {
-            return response()->json([
-                'message' => 'Erro interno no servidor',
-                'error' => $e->getMessage(),
-            ], 500);
+            $logService = new LogService();
+            $response = $logService->handle($e);
+
+            return response()->json(
+                $response['body'],
+                $response['status']
+            );
         }
     }
 }

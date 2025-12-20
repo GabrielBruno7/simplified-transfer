@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use Domain\Auth\Auth;
 use Domain\User\User;
-use Domain\ErrorCodes;
-use Domain\UserException;
+use Infra\Log\LogService;
 use Infra\Database\AuthDb;
 use Infra\Database\UserDb;
 use Illuminate\Http\Request;
-use Infra\Log\LogService;
 
 class AuthController extends Controller
 {
