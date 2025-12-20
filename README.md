@@ -1,4 +1,4 @@
-# PicPay Simplificado
+# Simplified Transfer
 
 Um sistema simples de transferências financeiras construído com Laravel. O projeto simula funcionalidades básicas de uma carteira digital, permitindo que usuários façam login, se cadastrem e realizem transferências.
 
