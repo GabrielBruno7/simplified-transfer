@@ -45,7 +45,10 @@ class Transfer
     public function setValue(float $value): self
     {
         if ($value <= 0) {
-            throw new \InvalidArgumentException('Value must be greater than zero'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_TRANSFER_VALUE_MUST_BE_GREATER_THAN_ZERO,
+                "The transfer value '{$value}' must be greater than zero"
+            );
         }
 
         $this->value = $value;

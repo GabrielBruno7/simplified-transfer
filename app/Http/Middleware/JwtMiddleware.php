@@ -48,7 +48,7 @@ class JwtMiddleware
             return response()->json([
                 'error' => 'Token expirado'
             ], 401);
-        } catch (\Firebase\JWT\SignatureInvalidException $e) { //TODO CUSTOM ERROR
+        } catch (\Firebase\JWT\SignatureInvalidException $e) {
             return response()->json([
                 'error' => 'Assinatura do token inválida'
             ], 401);

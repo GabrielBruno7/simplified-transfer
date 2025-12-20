@@ -15,6 +15,9 @@ class ErrorCodes
     public const USER_NOT_FOUND = 4006;
     public const USER_USER_INVALID_TYPE = 4007;
     public const USER_ERROR_ALREADY_EXISTS = 4008;
+    public const USER_ERROR_TRANSFER_VALUE_MUST_BE_GREATER_THAN_ZERO = 4009;
+    public const USER_ERROR_WALLET_NOT_FOUND = 4010;
+    public const USER_ERROR_WALLET_BALANCE_CANNOT_BE_NEGATIVE = 4011;
 
     public const TRANSLATIONS_PT_BR = [
         self::USER_NOT_FOUND => 'Usuário não encontrado',
@@ -25,6 +28,9 @@ class ErrorCodes
         self::USER_ERROR_SAME_USER_TRANSFER => 'Pagador e beneficiário não podem ser o mesmo usuário',
         self::USER_ERROR_TRANSFER_NOT_AUTHORIZED => 'Transferência não autorizada pelo serviço externo',
         self::USER_ERROR_ALREADY_EXISTS => 'O usuário já existe',
+        self::USER_ERROR_TRANSFER_VALUE_MUST_BE_GREATER_THAN_ZERO => 'O valor da transferência deve ser maior que zero',
+        self::USER_ERROR_WALLET_NOT_FOUND => 'Carteira não encontrada para o usuário',
+        self::USER_ERROR_WALLET_BALANCE_CANNOT_BE_NEGATIVE => 'O saldo da carteira não pode ser negativo',
     ];
 
     public const TRANSLATIONS = [

@@ -3,6 +3,8 @@
 namespace Domain\Wallet;
 
 use Domain\User\User;
+use Domain\ErrorCodes;
+use Domain\UserException;
 
 class Wallet
 {
@@ -36,7 +38,10 @@ class Wallet
     public function setBalance(float $balance): self
     {
         if ($balance < 0) {
-            throw new \InvalidArgumentException('Balance cannot be negative'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_WALLET_BALANCE_CANNOT_BE_NEGATIVE,
+                "The balance '{$balance}' cannot be negative"
+            );
         }
 
         $this->balance = $balance;
@@ -71,7 +76,10 @@ class Wallet
     public function loadByUser(): Wallet
     {
         if (!$this->getPersistence()->loadByUser($this)) {
-            throw new \Exception('Wallet not found for user'); //TODO: Custom Exception
+            throw new UserException(
+                ErrorCodes::USER_ERROR_WALLET_NOT_FOUND,
+                "The wallet for user '{$this->getUser()->getId()}' was not found"
+            );
         }
 
         return $this;

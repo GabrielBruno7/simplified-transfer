@@ -19,16 +19,16 @@ class TransferTest extends TestCase
 {
     public function testSetValueWithZeroThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be greater than zero');
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage("The transfer value '0' must be greater than zero");
 
         (new Transfer(new TransferMemory()))->setValue(0);
     }
 
     public function testSetValueWithNegativeAmountThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be greater than zero');
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage("The transfer value '-50' must be greater than zero");
 
         (new Transfer(new TransferMemory()))->setValue(-50.0);
     }
