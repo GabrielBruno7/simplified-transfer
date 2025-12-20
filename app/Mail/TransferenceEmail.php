@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
 
 class TransferenceEmail extends Mailable implements ShouldQueue
 {
@@ -38,6 +39,15 @@ class TransferenceEmail extends Mailable implements ShouldQueue
     public function attachments(): array
     {
         return [];
+    }
+
+    public function sendWithFailureSimulation()
+    {
+        if (random_int(0, 1) === 1) {
+            throw new \RuntimeException('Falha no envio de email');
+        }
+
+        Mail::to(env('DEFAULT_EMAIL_RECEIVER'))->send($this);
     }
 
     public function backoff(): array
