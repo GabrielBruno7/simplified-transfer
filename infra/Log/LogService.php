@@ -32,7 +32,7 @@ class LogService implements LogServiceInterface
             'status' => 500,
             'body' => [
                 'message' => self::DEFAULT_ERROR_MESSAGE,
-                'trace' => $e->getTraceAsString(),
+                'trace' => explode(PHP_EOL, $e->getTraceAsString()),
             ],
         ];
     }
