@@ -28,13 +28,40 @@ class LogService implements LogServiceInterface
 
     private function returnBodyForGenericException(Throwable $e): array
     {
+        $body = ['message' => self::DEFAULT_ERROR_MESSAGE];
+
+        if (app()->environment('local', 'testing')) {
+            $body['exception'] = class_basename($e);
+            $body['error'] = $e->getMessage();
+            $body['trace'] = $this->cleanTrace($e);
+        }
+
         return [
             'status' => 500,
-            'body' => [
-                'message' => self::DEFAULT_ERROR_MESSAGE,
-                'trace' => explode(PHP_EOL, $e->getTraceAsString()),
-            ],
+            'body' => $body,
         ];
+    }
+
+    private function cleanTrace(Throwable $e): array
+    {
+        return collect($e->getTrace())
+            ->filter(fn ($frame) =>
+                isset($frame['file']) &&
+                (
+                    str_contains($frame['file'], '/app/') ||
+                    str_contains($frame['file'], '/Domain/') ||
+                    str_contains($frame['file'], '/Infra/')
+                )
+            )
+            ->map(fn ($frame) => [
+                'file' => str_replace(base_path(), '', $frame['file']),
+                'line' => $frame['line'] ?? null,
+                'function' => $frame['function'] ?? null,
+                'class' => $frame['class'] ?? null,
+            ])
+            ->values()
+            ->toArray()
+        ;
     }
 
     private function returnBodyForUserException(UserException $e): array

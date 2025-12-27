@@ -113,4 +113,11 @@ class Wallet
 
         return $this;
     }
+
+    public function addBalance(float $amount): Wallet
+    {
+        $this->setBalance($this->getBalance() + $amount);
+
+        return $this;
+    }
 }

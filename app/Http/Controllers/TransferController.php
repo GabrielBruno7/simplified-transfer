@@ -56,6 +56,36 @@ class TransferController extends Controller
         }
     }
 
+    public function actionAddBalance(Request $request, string $document)
+    {
+        try {
+            $validatedData = $request->validate([
+                'valor' => 'required|numeric',
+            ]);
+
+            $user = (new User(new UserDb()))
+                ->setDocument($document)
+                ->loadByDocument()
+                ->getWallet()
+                ->addBalance($validatedData['valor'])
+                ->updateBalance()
+            ;
+
+            return response()->json([
+                'Carteira' => $user->getId(),
+                'Saldo Inserido' => "R$ {$validatedData['valor']}",
+            ], 200);
+        } catch (\Throwable $e) {
+            $logService = new LogService();
+            $response = $logService->handle($e);
+
+            return response()->json(
+                $response['body'],
+                $response['status']
+            );
+        }
+    }
+
     public function actionStatements(string $document)
     {
         try {
