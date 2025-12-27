@@ -22,15 +22,18 @@ class LogService implements LogServiceInterface
 
         return match ($e instanceof UserException) {
             true => $this->returnBodyForUserException($e),
-            false => $this->returnBodyForGenericException(),
+            false => $this->returnBodyForGenericException($e),
         };
     }
 
-    private function returnBodyForGenericException(): array
+    private function returnBodyForGenericException(Throwable $e): array
     {
         return [
             'status' => 500,
-            'body' => ['message' => self::DEFAULT_ERROR_MESSAGE],
+            'body' => [
+                'message' => self::DEFAULT_ERROR_MESSAGE,
+                'trace' => $e->getTraceAsString(),
+            ],
         ];
     }
 

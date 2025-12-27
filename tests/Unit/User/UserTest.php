@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Domain\ErrorCodes;
 use Domain\User\User;
+use Domain\ErrorCodes;
 use Domain\Wallet\Wallet;
 use Infra\Memory\UserMemory;
 use Infra\Memory\WalletMemory;

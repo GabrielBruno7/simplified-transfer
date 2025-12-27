@@ -16,7 +16,7 @@ class AuthController extends Controller
         try {
             $validatedData = $request->validate([
                 'email' => 'required|email',
-                'password' => 'required|string',
+                'senha' => 'required|string',
             ]);
 
             $user = (new User(new UserDb()))
@@ -26,7 +26,7 @@ class AuthController extends Controller
 
             $auth = (new Auth(new AuthDb()))
                 ->setUser($user)
-                ->setPassword($validatedData['password'])
+                ->setPassword($validatedData['senha'])
                 ->authenticate()
             ;
 
