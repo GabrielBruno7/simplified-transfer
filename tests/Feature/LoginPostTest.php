@@ -15,7 +15,7 @@ class LoginPostTest extends TestCase
 
     public function testShouldLoginSuccessfully(): void
     {
-       $data = [
+        $data = [
             'tipo' => 'comum',
             'senha' => 'Senha@123',
             'nome' => 'João da Silva',
@@ -40,7 +40,7 @@ class LoginPostTest extends TestCase
 
     public function testShouldThrowExceptionWhenPasswordIsWrong(): void
     {
-       $data = [
+        $data = [
             'tipo' => 'comum',
             'senha' => 'Senha@123',
             'nome' => 'João da Silva',
@@ -68,7 +68,7 @@ class LoginPostTest extends TestCase
             ])
         ;
     }
-    
+
     public function testShouldThrowExceptionWhenUserNotExists(): void
     {
         $data = [

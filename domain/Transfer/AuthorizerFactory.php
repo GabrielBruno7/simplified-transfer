@@ -12,6 +12,10 @@ class AuthorizerFactory
 
     public static function make(): TransferAuthorizerInterface
     {
+        if (app()->bound(TransferAuthorizerInterface::class)) {
+            return app(TransferAuthorizerInterface::class);
+        }
+
         return match(app()->environment(self::ENVIROMENT_LOCAL, self::ENVIROMENT_TESTING)) {
             true => new TransferAuthorizer(),
             false => new HttpTransferAuthorizer(),
